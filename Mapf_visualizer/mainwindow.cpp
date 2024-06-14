@@ -472,7 +472,7 @@ void MainWindow::visualize()
         timers[i] = new QTimeLine(500*length[i]);
         timers[i]->setUpdateInterval(5);
         timers[i]->setFrameRange(0,framerange);
-        timers[i]->setCurveShape(QTimeLine::LinearCurve);
+        timers[i]->setEasingCurve(QEasingCurve::Linear);
         animations[i] = new QGraphicsItemAnimation;
         animations[i]->setItem(balls[i]);
         animations[i]->setTimeLine(timers[i]);
