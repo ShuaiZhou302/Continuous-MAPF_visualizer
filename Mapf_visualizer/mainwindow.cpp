@@ -366,12 +366,14 @@ void MainWindow::createMap()
     painter.end();
     imgpaths = img;
     painter.begin(&imgpaths);
-    pen.setColor(QColor("grey"));
+    //pen.setColor(QColor("grey"));
     pen.setWidth(2);
     pen.setStyle(Qt::DashLine);
-    painter.setPen(pen);
+    //painter.setPen(pen);
     for(int i = 0; i < paths.size(); i++)
     {
+        pen.setColor(agent_colors[i]); // 使用 agent_colors 中的颜色
+        painter.setPen(pen);
         for(int j = 0; j < paths[i].size() - 1; j++)
             painter.drawLine(paths[i][j].sx*cellSize+cellSize/2, paths[i][j].sy*cellSize+cellSize/2,paths[i][j+1].sx*cellSize+cellSize/2,paths[i][j+1].sy*cellSize+cellSize/2);
         painter.drawLine(paths[i][paths[i].size()-1].sx*cellSize+cellSize/2, paths[i][paths[i].size()-1].sy*cellSize+cellSize/2,paths[i][paths[i].size()-1].fx*cellSize+cellSize/2,paths[i][paths[i].size()-1].fy*cellSize+cellSize/2);
