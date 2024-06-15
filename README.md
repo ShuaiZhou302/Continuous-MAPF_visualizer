@@ -9,7 +9,7 @@ Demo1 : <br>
 <img src="DemoInput/demo.png" width="600">  <br>
 Demo2 : <br>
 <img src="/DemoInput/Demo-gif.gif" width="600"> <br>
-The map and scenario task are from [Pathfing Benchmark](https://movingai.com/benchmarks/) <br>
+The map and scenario task are from [Pathfinding Benchmark](https://movingai.com/benchmarks/) <br>
 <br>
 Simply clone and using Qt creator to construct and run<br>
 load the file when window pops out.<br>
