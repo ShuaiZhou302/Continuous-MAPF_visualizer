@@ -5,5 +5,5 @@ Demo : <br>
 <img src="DemoInput/demo.png" width="500">  
 construct and run <br>
 load your xml file <br>
-Inspired by one issue in [CCBS](https://github.com/PathPlanning/Continuous-CBS) <br>
+Basic frame comes from one issue in [CCBS](https://github.com/PathPlanning/Continuous-CBS) <br>
 Add some features
