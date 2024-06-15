@@ -6,9 +6,9 @@ Basic frame comes from one issue in [CCBS](https://github.com/PathPlanning/Conti
 Using Qt4.6.1, C++17.<br> 
 <br>
 Demo1 : <br>
-<img src="DemoInput/demo.png" width="500">  
+<img src="DemoInput/demo.png" width="600">  
 Demo2 : <br>
-![room-32-32-4](/DemoInput/Demo-gif.gif)
+<img src="/DemoInput/Demo-gif.gif"width="600">
 The map and scenario task are from [Pathfing Benchmark](https://movingai.com/benchmarks/) <br>
 </div>
 Simply clone and using Qt creator to construct and run<br>
