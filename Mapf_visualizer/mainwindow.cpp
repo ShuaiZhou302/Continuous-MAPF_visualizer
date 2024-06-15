@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timers.resize(0);
     animations.resize(0);
     balls.resize(0);
+    agent_colors.clear();
     //filename=QString::fromStdString("D:/SVN/MovingsVisualizer2/MovingsVisualizer2/astar_log.xml");
     //visualize();
 
@@ -171,23 +172,48 @@ bool MainWindow::getData(QString filename)
 {
     QFile logfile(filename);
     logfile.open(QIODevice::ReadOnly | QIODevice::Text);
+
     QDomDocument xml;
     paths.clear();
     xml.setContent(&logfile);
     QVector<section> path;
     section cur;
+
     if(xml.elementsByTagName("agent").size() == 0)
         return false;
+
     target_poses.resize(xml.elementsByTagName("agent").count());
     target_timings.resize(xml.elementsByTagName("agent").count());
+    agent_colors.resize(xml.elementsByTagName("agent").count());
     maxduration = 0;
+
     for(int j = 0; j < xml.elementsByTagName("agent").size(); j++)
     {
         double curtime(0);
         path.clear();
         QDomElement hplevel = xml.elementsByTagName("agent").at(j).toElement();
-        QDomElement pathelem = hplevel.firstChildElement().firstChildElement();
-        int k=0;
+
+        // Read color element if present
+        QDomElement colorElem = hplevel.firstChildElement("color");
+        if (!colorElem.isNull())
+        {
+            if (colorElem.hasAttribute("RGB"))
+            {
+                QString rgbValue = colorElem.attribute("RGB");
+                rgbValue = rgbValue.remove("(").remove(")");
+                QStringList rgbList = rgbValue.split(",");
+                if (rgbList.size() == 3)
+                {
+                    int r = rgbList.at(0).toInt();
+                    int g = rgbList.at(1).toInt();
+                    int b = rgbList.at(2).toInt();
+                    // Process RGB values as needed
+                    agent_colors[j] = QColor(r, g, b);
+                }
+            }
+        }
+        QDomElement pathelem = hplevel.firstChildElement("path").firstChildElement();
+
         while(!pathelem.attribute("start_i").isNull())
         {
             cur.sy = pathelem.attribute("start_i").toDouble();
@@ -196,38 +222,9 @@ bool MainWindow::getData(QString filename)
             cur.fx = pathelem.attribute("goal_j").toDouble();
             cur.sheading = 0;//pathelem.attribute("start.heading").toDouble();
             cur.gheading = 0;//pathelem.attribute("goal.heading").toDouble();
-            /*if(k==0)
-            {
-                cur.sheading = 180;
-                cur.gheading = 180;
-            }
-            else if(k==1)
-            {
-                cur.sheading = 180;
-            }
-            k++;*/
-            /*if(cur.sheading < 180 && cur.sheading != 0)
-                cur.sheading += 180;
-            else if(cur.sheading > 180)
-                 cur.sheading -= 180;
-            if(cur.gheading < 180 && cur.gheading != 0)
-                cur.gheading += 180;
-            else if(cur.gheading > 180)
-                 cur.gheading -= 180;*/
-            //cur.sheading += 180;
-            //if(cur.sheading >= 360)
-            //    cur.sheading -= 360;
-            //cur.gheading += 180;
-            //if(cur.gheading >= 360)
-            //    cur.gheading -= 360;
             cur.length = pathelem.attribute("duration").toDouble();
             curtime += cur.length;
             cur.g = curtime;
-            /*if(cur.length == 10)
-            {
-                target_poses[j].push_back(std::make_pair(cur.sx, cur.sy));
-                target_timings[j].push_back(curtime-5);
-            }*/
             target_poses[j] = {std::make_pair(cur.sx, cur.sy)};
             cur.size = 0.33;
             path.push_back(cur);
@@ -250,30 +247,6 @@ bool MainWindow::getData(QString filename)
             cur.fy = pathelem.attribute("goal.y").toDouble();
             cur.sheading = 0;//pathelem.attribute("start.heading").toDouble();
             cur.gheading = 0;//pathelem.attribute("goal.heading").toDouble();
-            /*if(k==0)
-            {
-                cur.sheading = 180;
-                cur.gheading = 180;
-            }
-            else if(k==1)
-            {
-                cur.sheading = 180;
-            }
-            k++;*/
-            /*if(cur.sheading < 180 && cur.sheading != 0)
-                cur.sheading += 180;
-            else if(cur.sheading > 180)
-                 cur.sheading -= 180;
-            if(cur.gheading < 180 && cur.gheading != 0)
-                cur.gheading += 180;
-            else if(cur.gheading > 180)
-                 cur.gheading -= 180;*/
-            //cur.sheading += 180;
-            //if(cur.sheading >= 360)
-            //    cur.sheading -= 360;
-            //cur.gheading += 180;
-            //if(cur.gheading >= 360)
-            //    cur.gheading -= 360;
             cur.length = pathelem.attribute("duration").toDouble();
             cur.size = 0.33;
             path.push_back(cur);
@@ -457,15 +430,16 @@ void MainWindow::visualize()
     //std::ofstream out("log_out.txt", std::ios_base::app);
     for(int i = 0; i<paths.size(); i++)
     {
+        QColor agentColor = agent_colors[i];
         if(cellSize > 2)
         {
             if(paths[i][0].size > 0.5)
-                balls[i] = new agent(cellSize*2*paths[i][0].size-2);
+                balls[i] = new agent(cellSize*2*paths[i][0].size-2, agentColor);
             else
-                balls[i] = new agent(cellSize*2*paths[i][0].size-1);
+                balls[i] = new agent(cellSize*2*paths[i][0].size-1, agentColor);
         }
         else
-            balls[i] = new agent(cellSize*2*paths[i][0].size);
+            balls[i] = new agent(cellSize*2*paths[i][0].size, agentColor);
         for(int j=0; j<targets[i].size(); j++)
             targets[i][j] = new target(cellSize-1);
         //balls[i]->setTransformOriginPoint(cellSize, cellSize);

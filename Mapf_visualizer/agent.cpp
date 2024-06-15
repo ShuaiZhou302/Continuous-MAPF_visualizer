@@ -1,9 +1,10 @@
 #include "agent.h"
 #include <QColor>
-agent::agent(int size)
+agent::agent(int size,const QColor &color)
 {
     active=2;
     this->size=size;
+    this->color = color;
 }
 
 QRectF agent::boundingRect() const
@@ -13,7 +14,6 @@ QRectF agent::boundingRect() const
 
 void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QColor color;
     QRectF rect = boundingRect();
     if(active==1)
     {
@@ -30,7 +30,7 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
         QPen pen(Qt::black, 1);
         painter->setPen(pen);
         Qt::BrushStyle style = Qt::SolidPattern;
-        QBrush brush = QBrush(color.fromRgb(255,165,0), style);
+        QBrush brush = QBrush(color, style);
         painter->setBrush(brush);
         painter->drawEllipse(rect);
         QPen pen2(Qt::black, 3);
@@ -41,9 +41,9 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     }
     else if(active==3)
     {
-        QPen pen(Qt::black, 1);
+        QPen pen(color, 3);
         painter->setPen(pen);
-        Qt::BrushStyle style = Qt::SolidPattern;
+        Qt::BrushStyle style = Qt::NoBrush;
         QBrush brush = QBrush(Qt::green, style);
         painter->setBrush(brush);
         painter->drawEllipse(rect);
@@ -68,6 +68,11 @@ void agent::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 void agent::setActive(int active)
 {
     this->active=active;
+}
+
+void agent::setColor(const QColor &color)
+{
+    this->color = color;
 }
 
 

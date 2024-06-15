@@ -96,6 +96,7 @@ private:
     int height;
     int maxl_i;
     double maxduration;
+    QVector<QColor> agent_colors;
 };
 
 #endif // MAINWINDOW_H
