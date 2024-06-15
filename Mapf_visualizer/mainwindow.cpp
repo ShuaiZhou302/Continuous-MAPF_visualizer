@@ -304,7 +304,7 @@ void MainWindow::createMap()
         {
             point.setX(k);
             point.setY(j);
-            if(*it != '0' && *it != ' ')
+            if(*it != '0' && *it != ' '&& *it != '1' && *it != '2')
             {
                 QString a = *it;
                 int l = a.toInt();
@@ -340,6 +340,20 @@ void MainWindow::createMap()
                 painter.setPen(pen);
                 k++;
                 painter.drawPoint(point.x()*cellSize+cellSize/2, point.y()*cellSize+cellSize/2);
+            }
+            else if (*it == '1')
+            {
+                pen.setColor(QColor("black"));
+                painter.setPen(pen);
+                k++;
+                painter.drawPoint(point.x() * cellSize + cellSize / 2, point.y() * cellSize + cellSize / 2);
+            }
+            else if (*it == '2')
+            {
+                pen.setColor(QColor("darkgreen"));
+                painter.setPen(pen);
+                k++;
+                painter.drawPoint(point.x() * cellSize + cellSize / 2, point.y() * cellSize + cellSize / 2);
             }
         }
         j++;
